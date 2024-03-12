@@ -6,11 +6,11 @@ class UserController {
     // async significa assincrona, algo que acontece depois
     //criar usuarios
         async createUser(req, res) {
-            const {name, email, password, fone, dateCreate} = req.body;
+            const {name, email, password, fone, dateCreate, dateUpdate} = req.body;
             
             //const isAdmin = false;
     
-            await knex("users").insert({name, email, password, /*isAdmin*/ fone, dateCreate});
+            await knex("users").insert({name, email, password, /*isAdmin*/ fone, dateCreate, dateUpdate});
             
             return res.status(201).json("Usuário cadastrado com sucesso!!");
         }

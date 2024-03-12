@@ -12,7 +12,6 @@ app.use((err, req, res, next) => {
     console.log.error(err.stack);
     res.status(500).send("ALdo deu errado!!!")
 })
-
 //porta do servidor
 const PORT = 3333;
 

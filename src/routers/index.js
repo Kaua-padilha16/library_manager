@@ -5,8 +5,8 @@ const loanRoutes = require("./loan.routes");
 
 const routes = Router()
 
-routes.use("/", bookRoutes)
-routes.use("/", userRoutes)
-routes.use("/", loanRoutes)
+routes.use("/books", bookRoutes)
+routes.use("/users", userRoutes)
+routes.use("/loans", loanRoutes)
 
 module.exports = routes

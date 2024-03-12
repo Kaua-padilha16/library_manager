@@ -6,17 +6,19 @@ class BookController {
 //criar tarefas
     async createBook(req, res) {
         
-        const {title, author, numPag, category} = req.body;
+        const {title, author, numPag, category, dateCreate, dateUpdate} = req.body;
 
     const book = {
         title,
         author,
         numPag,
         category,
-        available: true
+        available: true,
+        dateCreate,
+        dateUpdate
     }
 //
-        await knex("books").insert({title: book.title, author: book.author, numPag: book.numPag, category: book.category, available: book.available});
+        await knex("books").insert({title: book.title, author: book.author, numPag: book.numPag, category: book.category, available: book.available, dateCreate: book.dateCreate, dateUpdate: book.dateUpdate});
 
         return res.status(201).json("Livro adicionado na biblioteca!!");
     }

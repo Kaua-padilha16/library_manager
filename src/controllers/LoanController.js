@@ -8,31 +8,72 @@ async createLoans(req, res) {
     const {user_id} = req.params;
     const {book_id} = req.params;
 
-    await knex ("loans").insert({user_id, book_id})
-    await knex ("books").where({id: book_id}).update({available: false})
+    const book = await knex("books").where({id: book_id}).first();
+    const user = await knex("users").where({id: user_id}).first();
+//verificar se livro ou usuario existe
+    if(!book) {
+        return res.status(400).json("Livro não encontrado!")
+    };
+    if(!user) {
+        return res.status(400).json("Usuário não encontrado!")
+    };
+//realizar o emprestimo
+    await knex ("loans").insert({user_id, book_id});
+    await knex ("books").where({id: book_id}).update({available: false});
     return res.status(200).json("Livro emprestado com sucesso!!");
-    
 }
+
+
 // listar emprestimos
 async listLoans(req, res) {
-    const loans = await knex("loans");
+    const {user_id} = req.params
+
+    const loans = await knex("loans")
+    .where({user_id})
+    .innerJoin('books', 'books.id', 'loans.book_id')
+    .select('books.title', 'books.author', 'books.numPag', 'books.category')
+
         return res.status(200).json(loans)
 }
-//listar emprestimos pelo id
-async listLoansById(req, res) {
-    const {loan_id} = req.params
-    const [loan] = await knex("loans").where({id: loan_id})
 
-    return res.status(200).json(loan)
+
+//contar o total de livros emprestados
+async totalLoans(req, res) {
+    const {user_id} = req.params;
+
+    const [total] = await knex('loans').where({user_id}).count({books: 'book_id'});
+
+    return res.status(200).json(total);
 }
-//Devolvendo o livro e deletando o emprestimo
-async deleteLoans(req, res) {
-    const {loan_id} = req.params
-    const {book_id} = req.params
 
-    await knex("loans").where({id: loan_id}).delete();
+//Devolvendo o livro
+async returnLoans(req, res) {
+
+    const {user_id} = req.params;
+    const {book_id} = req.params;
+
+    const user = await knex("users").where({id: user_id}).first();
+    const book = await knex("books").where({id}).first();
+//verificar se livro ou usuario existe
+    if(!book) {
+        return res.status(400).json("Livro não encontrado!")
+    };
+    if(!user) {
+        return res.status(400).json("Usuário não encontrado!")
+    };
+
+//devolvendo o livro
+    const [loan] = await knex("loans").where({user_id});
+console.log(loan);
+    const bookId = loan.book_id
+console.log(bookId);
+    if(bookId == book_id) {
+
     await knex("books").where({id: book_id}).update({available: true});
-    return res.status(200).json("Emprestimo deletado com sucesso! O livro também foi devolvido! Obrigado!!");
-}
+
+    return res.status(200).json("Livro devolvido com sucesso!")
+    }
+    return res.status(400).json("Operação não realizada!");
+  }
 }
 module.exports = LoanController
