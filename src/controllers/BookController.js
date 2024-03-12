@@ -13,7 +13,7 @@ class BookController {
         author,
         numPag,
         category,
-        available: false
+        available: true
     }
 //
         await knex("books").insert({title: book.title, author: book.author, numPag: book.numPag, category: book.category, available: book.available});
