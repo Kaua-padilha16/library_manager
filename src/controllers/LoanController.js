@@ -53,7 +53,7 @@ async returnLoans(req, res) {
     const {book_id} = req.params;
 
     const user = await knex("users").where({id: user_id}).first();
-    const book = await knex("books").where({id}).first();
+    const book = await knex("books").where({id: book_id}).first();
 //verificar se livro ou usuario existe
     if(!book) {
         return res.status(400).json("Livro não encontrado!")
