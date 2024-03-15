@@ -537,8 +537,8 @@
         "loans/devolucao/{user_id}/{book_id}": {
             "patch": {
                 "tags": ["loans"],
-                "summary": "Muda status do livro",
-                "description": "Muda o status de available de um livro específico pelo id!",
+                "summary": "Devolver um livro",
+                "description": "devolve um livro emprestado pelo usuario, utilizando o id de usuario e de livro!",
                 "operationId": "returnLoans",
                 "parameters": [
                     {
